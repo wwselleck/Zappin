@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -20,12 +20,12 @@ public class AttackMain : MonoBehaviour
 
 	//Dot prefab
 	public GameObject prefab;
-
-
+	public static bool dragActive = false;
+	public static List<GameObject> dots = new List<GameObject>();
 
 	void Start() 
 	{
-		numDots = 3; //Random.Range(5, 8);
+		numDots = 6; //Random.Range(5, 8);
 		gameOver = false;
 		PlayGame();
 	}
@@ -36,6 +36,13 @@ public class AttackMain : MonoBehaviour
 		{
 			gameOver = true; //you won bro!
 		}
+		if (Input.GetMouseButtonUp(0) && dragActive)
+		{
+			print("FUCK");
+			dragActive = false;
+			SetAllDotsInactive();
+		}
+
 
 	}
 
@@ -51,13 +58,13 @@ public class AttackMain : MonoBehaviour
 							, finishTexture);
 		}
 	}
+
 	
 
 	void PlayGame()
 	{
 		float lastX = 10;
 		float lastY = 10;
-		List<GameObject> dots = new List<GameObject>();
 		for(int i = 0; i < numDots; i++)
 		{
 			//yield return new WaitForSeconds(0);
@@ -73,12 +80,20 @@ public class AttackMain : MonoBehaviour
 			lastX = x;
 			lastY = y;
 			GameObject dot = Instantiate(prefab, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
-            dot.GetComponent<DotScript>().SetSprite(i);
-		}	
+			dot.GetComponent<DotScript>().Setup(i);
+            dots.Add(dot);
+		}		
+	}
 
+
+
+	void SetAllDotsInactive()
+	{
+		for(int i = 0; i < currentDot; i++)
+		{
+			dots[i].GetComponent<DotScript>().ActiveToggle();
+		}
 		currentDot = 0;
-
-		
 	}
 
 }
