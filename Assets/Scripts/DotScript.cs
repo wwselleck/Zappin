@@ -3,10 +3,24 @@ using System.Collections;
 
 public class DotScript : MonoBehaviour {
 
-	public Sprite[] dotTextures = new Sprite[8];
+	private int dotNum;
 	
 	public void SetSprite(int num)
 	{
-		GetComponent<SpriteRenderer>().sprite = dotTextures[num];
+		dotNum = num;
+		GetComponent<SpriteRenderer>().sprite = (Sprite) Resources.Load("Textures/Dots/" + (dotNum + 1) + "Dot", typeof(Sprite));
+		
 	}
+
+	void OnMouseDown()
+	{
+		if(AttackMain.currentDot == dotNum)
+		{
+			print("HIT");
+			Destroy(gameObject);
+			AttackMain.currentDot += 1;
+		}
+	}
+
+
 }
